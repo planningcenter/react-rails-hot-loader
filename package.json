@@ -1,0 +1,43 @@
+{
+  "name": "react-rails-hot-reload",
+  "version": "1.0.0",
+  "source": "index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.module.js",
+  "unpkg": "dist/index.umd.js",
+  "description": "React Rails Hot Reloading",
+  "scripts": {
+    "build": "microbundle",
+    "dev": "microbundle watch",
+    "test": "jest --watchAll",
+    "prepublishOnly": "yarn build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ministrycentered/react-rails-hot-reload.git"
+  },
+  "author": "Tanner Mares",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ministrycentered/react-rails-hot-reload/issues"
+  },
+  "homepage": "https://github.com/ministrycentered/react-rails-hot-reload#readme",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "devDependencies": {
+    "microbundle": "^0.12.3"
+  },
+  "peerDependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "webpack": "^4.44.1"
+  },
+  "dependencies": {
+    "@hot-loader/react-dom": "^16.13.0",
+    "lodash": "^4.17.20",
+    "react-hot-loader": "^4.12.21",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "webpack-merge": "^5.1.1"
+  }
+}
