@@ -3,9 +3,7 @@
   "version": "0.0.3",
   "main": "index.js",
   "description": "Hot Reloading for React Rails",
-  "scripts": {
-    "prepublishOnly": "yarn build"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/planningcenter/react-rails-hot-loader.git"
