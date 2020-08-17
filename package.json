@@ -1,9 +1,14 @@
 {
-  "name": "react-rails-hot-reload",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "@ministrycentered/react-rails-hot-reload",
+  "version": "0.0.1",
+  "source": "src/index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.module.js",
+  "unpkg": "dist/index.umd.js",
   "description": "React Rails Hot Reloading",
   "scripts": {
+    "build": "microbundle",
+    "dev": "microbundle watch",
     "prepublishOnly": "yarn build"
   },
   "repository": {
@@ -19,7 +24,9 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "microbundle": "^0.12.3"
+  },
   "peerDependencies": {
     "lodash": "^4.17.20",
     "react": "^16.13.1",
