@@ -1,7 +1,7 @@
-import { AppContainer } from "react-hot-loader";
-import React from "react";
-import ReactDOM from "react-dom";
-import _ from "lodash";
+const { AppContainer } = require("react-hot-loader");
+const React = require("react");
+const ReactDOM = require("react-dom");
+const _ = require("lodash");
 
 const components = {};
 
@@ -82,4 +82,4 @@ const ReactRailsHotReload = {
   },
 };
 
-export default ReactRailsHotReload;
+module.exports = ReactRailsHotReload;

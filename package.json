@@ -1,14 +1,9 @@
 {
   "name": "@planningcenter/react-rails-hot-loader",
   "version": "0.0.2",
-  "source": "src/index.js",
-  "main": "dist/index.js",
-  "module": "dist/index.module.js",
-  "unpkg": "dist/index.umd.js",
+  "main": "index.js",
   "description": "Hot Reloading for React Rails",
   "scripts": {
-    "build": "microbundle",
-    "dev": "microbundle watch",
     "prepublishOnly": "yarn build"
   },
   "repository": {
@@ -21,10 +16,10 @@
     "url": "https://github.com/planningcenter/react-rails-hot-loader/issues"
   },
   "homepage": "https://github.com/planningcenter/react-rails-hot-loader#readme",
-  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
-  "devDependencies": {
-    "microbundle": "^0.12.3"
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   },
+  "devDependencies": {},
   "peerDependencies": {
     "lodash": "^4.17.20",
     "react": "^16.13.1",

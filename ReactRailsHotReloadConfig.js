@@ -1,12 +1,10 @@
-import { join, relative } from "path";
-import { readdirSync, statSync } from "fs";
-
-import { merge } from "webpack-merge";
-import webpack from "webpack";
-
+const { join, relative } = require("path");
+const { readdirSync, statSync } = require("fs");
+const { merge } = require("webpack-merge");
+const webpack = require("webpack");
 const sourceDir = "app/javascript";
 
-export default class ReactRailsHotReloadConfig {
+class ReactRailsHotReloadConfig {
   constructor(webpackConfig) {
     this.webpackConfig = webpackConfig;
   }
@@ -60,3 +58,5 @@ export default class ReactRailsHotReloadConfig {
     return merge(this.webpackConfig, this.reactRailsHotReloadConfig());
   }
 }
+
+module.exports = ReactRailsHotReloadConfig;
