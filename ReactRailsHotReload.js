@@ -1,11 +1,11 @@
-import { AppContainer } from "react-hot-loader";
-import React from "react";
-import ReactDOM from "react-dom";
-import _ from "lodash";
+const { AppContainer } = require("react-hot-loader");
+const React = require("react");
+const ReactDOM = require("react-dom");
+const _ = require("lodash");
 
 const components = {};
 
-export default class ReactRailsHotReload {
+class ReactRailsHotReload {
   static init(module, webpackRequire) {
     window.ReactRailsUJS.mountComponents = ReactRailsHotReload.mountComponents;
 
@@ -27,6 +27,9 @@ export default class ReactRailsHotReload {
     return HMR_MODULES.map((dep) => require.context("../").resolve(dep));
   }
 
+  // This is an exact copy of the mountComponents function in react-rails
+  // https://github.com/reactjs/react-rails/blob/v2.6.1/react_ujs/index.js#L85
+  // with the addition of the AppContainer wrapping at the end
   static mountComponents(searchSelector) {
     let ujs = window.ReactRailsUJS;
     let nodes = ujs.findDOMNodes(searchSelector);
@@ -64,11 +67,19 @@ export default class ReactRailsHotReload {
           }
         }
         if (hydrate && typeof ReactDOM.hydrate === "function") {
-          ReactDOM.hydrate(<AppContainer>{component}</AppContainer>, node);
+          ReactDOM.hydrate(
+            React.createElement(AppContainer, {}, component),
+            node
+          );
         } else {
-          ReactDOM.render(<AppContainer>{component}</AppContainer>, node);
+          ReactDOM.render(
+            React.createElement(AppContainer, {}, component),
+            node
+          );
         }
       }
     }
   }
 }
+
+module.exports = ReactRailsHotReload;
