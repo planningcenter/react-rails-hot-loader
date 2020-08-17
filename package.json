@@ -1,6 +1,6 @@
 {
   "name": "@planningcenter/react-rails-hot-loader",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "index.js",
   "description": "Hot Reloading for React Rails",
   "scripts": {
