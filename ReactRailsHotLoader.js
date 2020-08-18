@@ -3,23 +3,24 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 const components = {};
-let AppContainerComponent = AppContainer;
-let AppProvider;
-let transformProps;
 
 const ReactRailsHotLoader = {
-  init: function (AppProvider, transformProps) {
-    AppProvider = AppProvider;
-    transformProps = transformProps;
+  init: function (AppProvider, __transformProps__) {
+    ReactRailsHotLoader.AppProvider = AppProvider;
+    ReactRailsHotLoader.__transformProps__ = __transformProps__;
   },
+
+  AppProvider: AppContainer,
+  __transformProps__: null,
 
   fixDeps: function (deps, webpackRequire) {
     return [...new Set(deps.flat())].forEach((dep) => webpackRequire(dep));
   },
 
-  // This is an exact copy of the mountComponents function in react-rails
+  // The majority of this function is is an exact copy of the mountComponents
+  // function in react-rails. The addition of the transformProps callback and
+  // AppProfider wrapping at the end are its only additions
   // https://github.com/reactjs/react-rails/blob/v2.6.1/react_ujs/index.js#L85
-  // with the addition of the AppContainer wrapping at the end
   mountComponents: function (searchSelector) {
     let ujs = window.ReactRailsUJS;
     let nodes = ujs.findDOMNodes(searchSelector);
@@ -36,8 +37,9 @@ const ReactRailsHotLoader = {
       );
 
       // This is for Services backward compatibility only.
-      let shouldTransformProps =
-        node.getAttribute("transform_props") === "true";
+      let __shouldTransformProps__ =
+        node.getAttribute("transform_props") === "true" &&
+        typeof ReactRailsHotLoader.__transformProps__ === "function";
 
       if (!constructor) {
         let message = "Cannot find component: '" + className + "'";
@@ -54,49 +56,29 @@ const ReactRailsHotLoader = {
         );
       } else {
         let component = components[cacheId];
+
         if (component === undefined) {
           component = React.createElement(
             constructor,
-            shouldTransformProps && typeof transformProps === "function"
-              ? transformProps(props)
+            __shouldTransformProps__
+              ? ReactRailsHotLoader.__transformProps__(props)
               : props
           );
           if (turbolinksPermanent) {
             components[cacheId] = component;
           }
         }
+
         if (hydrate && typeof ReactDOM.hydrate === "function") {
-          if (AppProvider) {
-            ReactDOM.hydrate(
-              React.createElement(
-                AppContainer,
-                {},
-                React.createElement(AppProvider, {}, component)
-              ),
-              node
-            );
-          } else {
-            ReactDOM.hydrate(
-              React.createElement(AppContainer, {}, component),
-              node
-            );
-          }
+          ReactDOM.hydrate(
+            React.createElement(ReactRailsHotLoader.AppProvider, {}, component),
+            node
+          );
         } else {
-          if (AppProvider) {
-            ReactDOM.render(
-              React.createElement(
-                AppContainer,
-                {},
-                React.createElement(AppProvider, {}, component)
-              ),
-              node
-            );
-          } else {
-            ReactDOM.render(
-              React.createElement(AppContainer, {}, component),
-              node
-            );
-          }
+          ReactDOM.render(
+            React.createElement(ReactRailsHotLoader.AppProvider, {}, component),
+            node
+          );
         }
       }
     }
