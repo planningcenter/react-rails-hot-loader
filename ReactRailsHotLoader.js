@@ -5,6 +5,8 @@ import ReactDOM from "react-dom";
 const components = {};
 
 const ReactRailsHotLoader = {
+  // AppProvider: must be wrapped by AppContainer.
+  // __transformProps__: is only used for Services backward compatibility. https://github.com/ministrycentered/services/blob/master/app/views/service_types/plans/show.html.erb#L28
   init: function (AppProvider, __transformProps__) {
     ReactRailsHotLoader.AppProvider = AppProvider;
     ReactRailsHotLoader.__transformProps__ = __transformProps__;
@@ -36,7 +38,7 @@ const ReactRailsHotLoader = {
         ujs.TURBOLINKS_PERMANENT_ATTR
       );
 
-      // This is for Services backward compatibility only.
+      // Trigger for Services __transform_props__ function.
       let __shouldTransformProps__ =
         node.getAttribute("transform_props") === "true" &&
         typeof ReactRailsHotLoader.__transformProps__ === "function";
