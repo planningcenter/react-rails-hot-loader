@@ -4,12 +4,13 @@ import ReactDOM from "react-dom";
 
 const components = {};
 let AppContainerComponent = AppContainer;
+let AppProvider;
+let transformProps;
 
 const ReactRailsHotLoader = {
-  init: function (AppContainer, transformProps) {
-    if (AppContainer) {
-      AppContainerComponent = AppContainer;
-    }
+  init: function (AppProvider, transformProps) {
+    AppProvider = AppProvider;
+    transformProps = transformProps;
   },
 
   fixDeps: function (deps, webpackRequire) {
@@ -56,22 +57,46 @@ const ReactRailsHotLoader = {
         if (component === undefined) {
           component = React.createElement(
             constructor,
-            shouldTransformProps ? transformProps(props) : props
+            shouldTransformProps && typeof transformProps === "function"
+              ? transformProps(props)
+              : props
           );
           if (turbolinksPermanent) {
             components[cacheId] = component;
           }
         }
         if (hydrate && typeof ReactDOM.hydrate === "function") {
-          ReactDOM.hydrate(
-            React.createElement(AppContainerComponent, {}, component),
-            node
-          );
+          if (AppProvider) {
+            ReactDOM.hydrate(
+              React.createElement(
+                AppContainer,
+                {},
+                React.createElement(AppProvider, {}, component)
+              ),
+              node
+            );
+          } else {
+            ReactDOM.hydrate(
+              React.createElement(AppContainer, {}, component),
+              node
+            );
+          }
         } else {
-          ReactDOM.render(
-            React.createElement(AppContainerComponent, {}, component),
-            node
-          );
+          if (AppProvider) {
+            ReactDOM.render(
+              React.createElement(
+                AppContainer,
+                {},
+                React.createElement(AppProvider, {}, component)
+              ),
+              node
+            );
+          } else {
+            ReactDOM.render(
+              React.createElement(AppContainer, {}, component),
+              node
+            );
+          }
         }
       }
     }
