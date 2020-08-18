@@ -1,4 +1,3 @@
-const ReactRailsHotReload = require("./ReactRailsHotReload");
-const ReactRailsHotReloadConfig = require("./ReactRailsHotReloadConfig");
+import ReactRailsHotLoader from "./ReactRailsHotLoader";
 
-module.exports = { ReactRailsHotReload, ReactRailsHotReloadConfig };
+export default ReactRailsHotLoader;

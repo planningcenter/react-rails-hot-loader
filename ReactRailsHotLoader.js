@@ -1,30 +1,19 @@
-const { AppContainer } = require("react-hot-loader");
-const React = require("react");
-const ReactDOM = require("react-dom");
-const _ = require("lodash");
+import { AppContainer } from "react-hot-loader";
+import React from "react";
+import ReactDOM from "react-dom";
 
 const components = {};
+let AppContainerComponent = AppContainer;
 
-const ReactRailsHotReload = {
-  init: function (module, webpackRequire) {
-    window.ReactRailsUJS.mountComponents = ReactRailsHotReload.mountComponents;
-
-    if (module.hot) {
-      module.hot.accept(ReactRailsHotReload.hmrModules(), (updatedDeps) => {
-        ReactRailsHotReload.fixDeps(updatedDeps).forEach((dep) =>
-          webpackRequire(dep)
-        );
-        window.ReactRailsUJS.mountComponents();
-      });
+const ReactRailsHotLoader = {
+  init: function (AppContainer, transformProps) {
+    if (AppContainer) {
+      AppContainerComponent = AppContainer;
     }
   },
 
-  fixDeps: function (deps) {
-    return _(deps).flatten().uniq().value();
-  },
-
-  hmrModules: function () {
-    return HMR_MODULES.map((dep) => require.context("../").resolve(dep));
+  fixDeps: function (deps, webpackRequire) {
+    return [...new Set(deps.flat())].forEach((dep) => webpackRequire(dep));
   },
 
   // This is an exact copy of the mountComponents function in react-rails
@@ -45,6 +34,10 @@ const ReactRailsHotReload = {
         ujs.TURBOLINKS_PERMANENT_ATTR
       );
 
+      // This is for Services backward compatibility only.
+      let shouldTransformProps =
+        node.getAttribute("transform_props") === "true";
+
       if (!constructor) {
         let message = "Cannot find component: '" + className + "'";
         if (console && console.log) {
@@ -61,19 +54,22 @@ const ReactRailsHotReload = {
       } else {
         let component = components[cacheId];
         if (component === undefined) {
-          component = React.createElement(constructor, props);
+          component = React.createElement(
+            constructor,
+            shouldTransformProps ? transformProps(props) : props
+          );
           if (turbolinksPermanent) {
             components[cacheId] = component;
           }
         }
         if (hydrate && typeof ReactDOM.hydrate === "function") {
           ReactDOM.hydrate(
-            React.createElement(AppContainer, {}, component),
+            React.createElement(AppContainerComponent, {}, component),
             node
           );
         } else {
           ReactDOM.render(
-            React.createElement(AppContainer, {}, component),
+            React.createElement(AppContainerComponent, {}, component),
             node
           );
         }
@@ -82,4 +78,4 @@ const ReactRailsHotReload = {
   },
 };
 
-module.exports = ReactRailsHotReload;
+export default ReactRailsHotLoader;

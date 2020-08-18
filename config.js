@@ -4,12 +4,8 @@ const { merge } = require("webpack-merge");
 const webpack = require("webpack");
 const sourceDir = "app/javascript";
 
-class ReactRailsHotReloadConfig {
-  constructor(webpackConfig) {
-    this.webpackConfig = webpackConfig;
-  }
-
-  walkSync(dir, fileList = []) {
+class ReactRailsHotLoaderConfig {
+  static walkSync(dir, fileList = []) {
     readdirSync(dir).forEach((file) => {
       const filePath = join(dir, file);
       if (filePath.includes(".DS_Store")) return;
@@ -21,21 +17,21 @@ class ReactRailsHotReloadConfig {
     return fileList;
   }
 
-  packFiles() {
+  static packFiles() {
     return this.walkSync(sourceDir);
   }
 
-  entries() {
-    return Object.keys(this.webpackConfig.entry).reduce((accu, key) => {
-      accu[key] = ["react-hot-loader/patch", this.webpackConfig.entry[key]];
+  static entries(webpackConfig) {
+    return Object.keys(webpackConfig.entry).reduce((accu, key) => {
+      accu[key] = ["react-hot-loader/patch", webpackConfig.entry[key]];
       return accu;
     }, {});
   }
 
-  reactRailsHotReloadConfig() {
+  static hotConfig(webpackConfig) {
     return {
       devtool: "cheap-eval-source-map",
-      entry: this.entries(),
+      entry: this.entries(webpackConfig),
       output: {
         publicPath: "http://localhost:3035/packs/",
       },
@@ -53,10 +49,9 @@ class ReactRailsHotReloadConfig {
     };
   }
 
-  merge(webpackConfig) {
-    this.webpackConfig = webpackConfig;
-    return merge(this.webpackConfig, this.reactRailsHotReloadConfig());
+  static merge(webpackConfig) {
+    return merge(webpackConfig, this.hotConfig(webpackConfig));
   }
 }
 
-module.exports = ReactRailsHotReloadConfig;
+module.exports = ReactRailsHotLoaderConfig;

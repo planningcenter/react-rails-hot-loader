@@ -19,15 +19,13 @@
   },
   "devDependencies": {},
   "peerDependencies": {
-    "lodash": "^4.17.20",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "@hot-loader/react-dom": "^16.13.0",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
     "react-hot-loader": "^4.12.21",
     "webpack": "^4.44.1"
   },
   "dependencies": {
-    "@hot-loader/react-dom": "^16.13.0",
-    "rollup-plugin-node-builtins": "^2.1.2",
     "webpack-merge": "^5.1.1"
   }
 }

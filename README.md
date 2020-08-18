@@ -1,1 +1,1 @@
-# react-rails-hot-reload
+# react-rails-hot-loader
