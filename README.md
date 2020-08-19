@@ -103,8 +103,6 @@ if (module.hot) {
 }
 ```
 
-## Contributing
-
 ## Questions
 ### Why can't I just use `react-hot-loader` directly?
 The first problem is that `react-rails` applications (at least the way PCO uses them) have multiple entry points and multiple root components. There isn't a main `<App>` that you can "just" wrap and mark as hot exported. (Step 2 of the [Getting Started section](https://github.com/gaearon/react-hot-loader#getting-started)). You could make sure that every component that gets used with `react_component` is wrapped with `hot`. But, ewe. I wanted a way that would work without needing to remember which components I could use with `react_component` or by wrapping EVERY component with `hot` to be safe.
@@ -125,5 +123,24 @@ Since most all of our apps were built with "legacy" React (classes), class compo
 
 If your team is ok with class components not preserving state and have figured out how to fit it into an app using `react-rails` multiple entry points, please let me know so I can add a link from this document.
 
-### Why should I trust you?
-I don't really know if you should. But this code has been in Services for the past 2+ years.
+## Contributing
+### Developing 
+1. clone the repo
+2. in the directory of the app in question
+    * `yarn add ../react-rails-hot-loader`
+    * this will point the package to your local copy
+    * assuming you've cloned into the same folder your app is in
+4. make edits
+5. `yarn add ../react-rails-hot-loader` to update the cache (it's annoying I know, but better then pushing build every time)
+
+### Publishing
+1. fix bug
+2. create a branch and pull request changes
+3. once merged edit `package.json` and bump build respectful of change (breaking: major, feature: minor, bugfix: patch)
+4. go to [releases](https://github.com/planningcenter/react-rails-hot-loader/releases)
+    * draft a new release with the bumped version as the tag version (targeting master)
+    * release title should match tag version
+    * add a note about what you broke, added, or fixed
+    * publish release
+5. in the `react-rails-hot-loader` directory run `npm publish`
+    * this will publish a new version using the version in the `package.json` we edited earlier
