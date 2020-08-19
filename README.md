@@ -19,11 +19,13 @@ yarn add @planningcenter/react-rails-hot-loader react-hot-loader @hot-loader/rea
 **Note:** Using this package assumes you already use `react-rails` and `webpacker` so you should have installed `rails_ujs` already.
 
 ## Getting started
-1. Add `react-hot-loader/babel` to your `.babelrc` _easy enough I thought it wasn't worth extracting_
+1. Add `react-hot-loader/babel` to your `babel.config.js` _easy enough I thought it wasn't worth extracting_
 ``` javascript
-// .babelrc
-{
- "plugins": ["react-hot-loader/babel"]
+// babel.config.js
+module.exports = function(api) {
+  return {
+    plugins: ["react-hot-loader/babel"]
+  }
 }
 ```
 
