@@ -66,7 +66,11 @@ if (module.hot) {
 ```
 The `ReactRailsHotloader.mountComponents` is an _almost_ exact duplicate of the function provided by `ReactRailsUJS`, but before rendering wraps the component in the `AppContainer` provided by `rails-hot-loader`.
 
-
+5. startup the webpack dev server
+``` bash
+$ bin/webpack-dev-server
+```
+6. bask in the warmth of the 🔥 loading
 
 ### Optional step
 If your app needs to wrap every component in something like a `ThemeProvider` from a ui-kit or an `ErrorBoundary` from a bug reporter you can use the optional `init` function to tell `ReactRailsHotLoader` to wrap your components in that instead.
