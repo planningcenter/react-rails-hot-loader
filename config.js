@@ -10,6 +10,12 @@ class ReactRailsHotLoaderConfig {
       const filePath = join(dir, file);
       if (filePath.includes(".DS_Store")) return;
       if (filePath.includes("packs")) return;
+      if (
+        !statSync(filePath).isDirectory() &&
+        !(filePath.includes(".js") || filePath.includes(".jsx"))
+      )
+        return;
+
       statSync(filePath).isDirectory()
         ? (fileList = this.walkSync(filePath, fileList))
         : fileList.push(`./${relative(sourceDir, filePath)}`);
