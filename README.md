@@ -98,7 +98,9 @@ import ReactRailsHotLoader from '@planningcenter/react-rails-hot-loader'
 ReactRailsHotLoader.init(AppProvider)
 ReactRailsUJS.mountComponents = ReactRailsHotLoader.mountComponents
 
-// ... same as before
+if (module.hot) {
+  // ... same as before
+}
 ```
 
 ## Contributing
