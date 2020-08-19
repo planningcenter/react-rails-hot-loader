@@ -126,4 +126,4 @@ Since most all of our apps were built with "legacy" React (classes), class compo
 If your team is ok with class components not preserving state and have figured out how to fit it into an app using `react-rails` multiple entry points, please let me know so I can add a link from this document.
 
 ### Why should I trust you?
-
+I don't really know if you should. But this code has been in Services for the past 2+ years.
