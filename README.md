@@ -1,5 +1,5 @@
 # react-rails-hot-loader
-This package is the product of [1](https://github.com/ministrycentered/services/pull/5681), [2](https://github.com/ministrycentered/services/pull/6868), [3](https://github.com/ministrycentered/services/pull/9363), separate free weeks the Services team used to get [`react-hot-loader`](https://github.com/gaearon/react-hot-loader) working with [`react-rails`](https://github.com/reactjs/react-rails) and [`webpacker`](https://github.com/rails/webpacker). According to the docs it should be pretty easy. Add a few deps, change some webpack config, wrap your "single entry point" and bing bang boom, 🔥 reloading. This is not real life. If you're curious about why it is not, see the [Questions](https://github.com/planningcenter/react-rails-hot-loader#questions) section below.
+This package is the product of [1](https://github.com/ministrycentered/services/pull/5681), [2](https://github.com/ministrycentered/services/pull/6868), [3](https://github.com/ministrycentered/services/pull/9363), separate free weeks the Services team used to get [`react-hot-loader`](https://github.com/gaearon/react-hot-loader) working with [`react-rails`](https://github.com/reactjs/react-rails) and [`webpacker`](https://github.com/rails/webpacker). According to the docs it should be pretty easy: add a few deps, change some webpack config, wrap your "single entry point" and bing bang boom, 🔥 reloading. However, this is not the case for react-rails projects that have multiple entry points. See the [Questions](https://github.com/planningcenter/react-rails-hot-loader#questions) section below for more details on why this is a specific problem with `react-rails`.
 
 Rather than share a large gist or pull request these two files with all the other config into every app. I wanted to share the setup a bit more easily and take advantage of one teams solution helping all of us.
 
@@ -19,7 +19,7 @@ yarn add @planningcenter/react-rails-hot-loader react-hot-loader @hot-loader/rea
 **Note:** Using this package assumes you already use `react-rails` and `webpacker` so you should have installed `rails_ujs` already.
 
 ## Getting started
-1. Add `react-hot-loader/babel` to your `babel.config.js` _easy enough I thought it wasn't worth extracting_
+1. Add `react-hot-loader/babel` to your `babel.config.js`
 ``` javascript
 // babel.config.js
 module.exports = function(api) {
@@ -77,13 +77,13 @@ $ bin/webpack-dev-server
 
 ### Optional step
 If your app needs to wrap every component in something like a `ThemeProvider` from a ui-kit or an `ErrorBoundary` from a bug reporter you can use the optional `init` function to tell `ReactRailsHotLoader` to wrap your components in that instead.
-#### Caveate: You will need to wrap whatever component you provide with `AppContainer` yourself
+***Please note: You will need to wrap your provided component with `react-hot-loader`'s `AppContainer` component***
 ``` javascript
 // ./AppProvider.js
 import React from 'react'
 import { AppContainer } from 'react-hot-loader'
-import { ThemeProvider } from './ui-kit'
-import { ErrorBoundary } from './bugsnag'
+import { ThemeProvider } from 'ui-kit'
+import { ErrorBoundary } from 'bugsnag'
 
 export default function AppProvider({ children }) {
   return (
@@ -113,7 +113,7 @@ if (module.hot) {
 
 ## Questions
 ### Why can't I just use `react-hot-loader` directly?
-The first problem is that `react-rails` applications (at least the way PCO uses them) have multiple entry points and multiple root components. There isn't a main `<App>` that you can "just" wrap and mark as hot exported. (Step 2 of the [Getting Started section](https://github.com/gaearon/react-hot-loader#getting-started)). You could make sure that every component that gets used with `react_component` is wrapped with `hot`. But, ewe. I wanted a way that would work without needing to remember which components I could use with `react_component` or by wrapping EVERY component with `hot` to be safe.
+The first problem is that `react-rails` applications (at least the way PCO uses them) have multiple entry points and multiple root components. There isn't a main `<App>` that you can _just_ wrap and mark as hot exported (step 2 of the [Getting Started section](https://github.com/gaearon/react-hot-loader#getting-started)). You could make sure that every component that gets used with `react_component` is wrapped with `hot`. But, ewe. I wanted a way that would work without needing to remember which components I could use with `react_component` or by wrapping EVERY component with `hot` to be safe.
 
 Second, you have to make sure that `react-hot-loader` is required before `react` and `react-dom`. With the combination of webpack and sprockets, it's hard to know where that spot is. So you'd probably want to use the patch option (step 3 second bullet). That means prepending each entry point with `react-hot-loader/path`, easy. But where are my entry points? With `webpacker` they're added dynamically based on the files in your packs folder. Hmmmm. Not so easy. This requires some "fun" webpack config massaging that I've saved you from having to do.
 
@@ -127,9 +127,9 @@ The `react-hot-loader` v4 added a `hot` function that is "supposed" to export a 
 One big caveat of its implementation however, is this little detail
 * local state won’t be preserved for class components 😢
 
-Since most all of our apps were built with "legacy" React (classes), class components would not be able to take advantage of state preservation. Ouch, that's like most of our apps. Until they figure that out, or we switch everything to functions, We need to keep using `react-hot-loader` which now has added some backports for hook support. ([see step 4. `@hot-loader/react-dom`](https://github.com/gaearon/react-hot-loader#getting-started))
+Since almost all of our apps were built with React class components, we would not be able to take advantage of state preservation. Ouch, that's like most of our apps! Until they figure that out, or we switch everything to functions, we need to keep using `react-hot-loader` which now has added backports for hooks support. ([see step 4. `@hot-loader/react-dom`](https://github.com/gaearon/react-hot-loader#getting-started))
 
-If your team is ok with class components not preserving state and have figured out how to fit it into an app using `react-rails` multiple entry points, please let me know so I can add a link from this document.
+If your team is ok with class components not preserving state and have figured out how to fit it into an app using `react-rails` multiple entry points, please let us know so we can add a link from this document.
 
 ## Contributing
 This project exists thanks to all the people who contribute.
