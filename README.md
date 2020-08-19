@@ -1,10 +1,94 @@
 # react-rails-hot-loader
-## What is this for?
-I know what you're thinking. It can't be this hard to add hot loading that I need a package dedicated to adding it? Go ahead. Try it. You'll be back.
+This package is the culmination of 3, possibly 4, separate free weeks the Services team used to get [`react-hot-loader`](https://github.com/gaearon/react-hot-loader) working with [`react-rails`](https://github.com/reactjs/react-rails) and [`webpacker`](https://github.com/rails/webpacker). According to the docs it should be pretty easy. Add a few deps, change some webpack config, wrap your "single entry point" and bing bang boom, 🔥 reloading. This is not real life. If you're curious about why it is not, see the [Questions](https://github.com/planningcenter/react-rails-hot-loader#questions) section below.
 
-This package is the culmination of 3, possibly 4, separate free weeks the Services team used to get [`react-hot-loader`](https://github.com/gaearon/react-hot-loader) working with [`react-rails`](https://github.com/reactjs/react-rails) and [`webpacker`](https://github.com/rails/webpacker). According to the docs it should be pretty easy. Add a few deps, change some webpack config, wrap your "single entry point" and bing bang boom, 🔥 reloading. This is not real life. If you're curious about why it is not, see the [Questions]() section below.
+Rather than share a large gist or pull request these two files with all the other config into every app. I wanted to share the setup a bit more easily and take advantage of one teams solution helping all of us.
 
-## Alright, I'm convinced. How do I Install this thing?
+## Install
+1. Add github packages config to your `.npmrc`
+``` bash
+# .npmrc
+//npm.pkg.github.com/:_authToken=GITHUB_PACKAGES_TOKEN
+@planningcenter:registry=https://npm.pkg.github.com
+```
+2. Add package and dependancies
+```
+yarn add @planningcenter/react-rails-hot-loader react-hot-loader @hot-loader/react-dom 
+```
+
+**Note:** Using this package assumes you already use `react-rails` and `webpacker` so you should have installed `rails_ujs` already.
+
+## Getting started
+1. Add `react-hot-loader/babel` to your `.babelrc` _easy enough I thought it wasn't worth extracting_
+``` javascript
+// .babelrc
+{
+ "plugins": ["react-hot-loader/babel"]
+}
+```
+
+2. Merge `ReactRailsHotLoaderConfig` into your webpack dev config
+``` javascript
+// config/webpack/development.js
+const ReactRailsHotLoaderConfig = require('@planningcenter/react-rails-hot-loader/config')
+// ... other dev config
+module.exports = ReactRailsHotLoaderConfig.merge(environment.toWebpackConfig())
+```
+
+3. Manually accept and require exposed hot modules
+``` javascript
+// packs/application.js
+import ReactRailsUJS from 'react_ujs'
+import ReactRailsHotLoader from '@planningcenter/react-rails-hot-loader'
+
+// Setup React Rails Hot Loader
+ReactRailsUJS.mountComponents = ReactRailsHotLoader.mountComponents
+
+if (module.hot) {
+  /* global __webpack_require__, HMR_MODULES */
+  module.hot.accept(
+    HMR_MODULES.map(dep => require.context('../').resolve(dep)),
+    deps => {
+      ReactRailsHotLoader.fixDeps(deps, __webpack_require__)
+      ReactRailsUJS.mountComponents()
+    }
+  )
+}
+```
+The `ReactRailsHotloader.mountComponents` is an _almost_ exact duplicate of the function provided by `ReactRailsUJS`, but before rendering wraps the component in the `AppContainer` provided by `rails-hot-loader`.
+
+### Optional step
+If your app needs to wrap every component in something like a `ThemeProvider` from a ui-kit or an `ErrorBoundary` from a bug reporter you can use the optional `init` function to tell `ReactRailsHotLoader` to wrap your components in that instead.
+#### Caveate: You will need to wrap whatever component you provide with `AppContainer` yourself
+``` javascript
+// ./AppProvider.js
+import React from 'react'
+import { AppContainer } from 'react-hot-loader'
+import { ThemeProvider } from './ui-kit'
+import { ErrorBoundary } from './bugsnag'
+
+export default function AppProvider({ children }) {
+  return (
+    <AppContainer>
+      <ErrorBoundary>
+        <ThemeProvider>{children}</ThemeProvider>
+      </ErrorBoundary>
+    </AppContainer>
+  )
+}
+```
+
+``` javascript
+// packs/application.js
+import AppProvider from './AppProvider'
+import ReactRailsUJS from 'react_ujs'
+import ReactRailsHotLoader from '@planningcenter/react-rails-hot-loader'
+
+// Must call init before mountComponents
+ReactRailsHotLoader.init(AppProvider)
+ReactRailsUJS.mountComponents = ReactRailsHotLoader.mountComponents
+
+// ... same as before
+```
 
 ## Contributing
 
@@ -27,3 +111,6 @@ One big caveat of its implementation however, is this little detail
 Since most all of our apps were built with "legacy" React (classes), class components would not be able to take advantage of state preservation. Ouch, that's like most of our apps. Until they figure that out, or we switch everything to functions, We need to keep using `react-hot-loader` which now has added some backports for hook support. ([see step 4. `@hot-loader/react-dom`](https://github.com/gaearon/react-hot-loader#getting-started))
 
 If your team is ok with class components not preserving state and have figured out how to fit it into an app using `react-rails` multiple entry points, please let me know so I can add a link from this document.
+
+### Why should I trust you?
+
