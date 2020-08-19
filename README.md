@@ -34,7 +34,7 @@ const ReactRailsHotLoaderConfig = require('@planningcenter/react-rails-hot-loade
 module.exports = ReactRailsHotLoaderConfig.merge(environment.toWebpackConfig())
 ```
 
-3. Manually accept and require exposed hot modules
+3. Override `ReactRailsUJS.mountcomponents` with our own and manually accept and require exposed hot modules
 ``` javascript
 // packs/application.js
 import ReactRailsUJS from 'react_ujs'
@@ -43,6 +43,7 @@ import ReactRailsHotLoader from '@planningcenter/react-rails-hot-loader'
 // Setup React Rails Hot Loader
 ReactRailsUJS.mountComponents = ReactRailsHotLoader.mountComponents
 
+// HMR_MODULES is exposed by the webpack dev config
 if (module.hot) {
   /* global __webpack_require__, HMR_MODULES */
   module.hot.accept(
