@@ -26,7 +26,15 @@ yarn add @planningcenter/react-rails-hot-loader react-hot-loader @hot-loader/rea
 }
 ```
 
-2. Merge `ReactRailsHotLoaderConfig` into your webpack dev config
+2. Enable hmr for webpacker
+``` yml
+# config/webpacker.yml
+
+dev_server:
+  hmr: true
+```
+
+3. Merge `ReactRailsHotLoaderConfig` into your webpack dev config
 ``` javascript
 // config/webpack/development.js
 const ReactRailsHotLoaderConfig = require('@planningcenter/react-rails-hot-loader/config')
@@ -34,7 +42,7 @@ const ReactRailsHotLoaderConfig = require('@planningcenter/react-rails-hot-loade
 module.exports = ReactRailsHotLoaderConfig.merge(environment.toWebpackConfig())
 ```
 
-3. Override `ReactRailsUJS.mountcomponents` with our own and manually accept and require exposed hot modules
+4. Override `ReactRailsUJS.mountcomponents` with our own and manually accept and require exposed hot modules
 ``` javascript
 // packs/application.js
 import ReactRailsUJS from 'react_ujs'
@@ -56,6 +64,8 @@ if (module.hot) {
 }
 ```
 The `ReactRailsHotloader.mountComponents` is an _almost_ exact duplicate of the function provided by `ReactRailsUJS`, but before rendering wraps the component in the `AppContainer` provided by `rails-hot-loader`.
+
+
 
 ### Optional step
 If your app needs to wrap every component in something like a `ThemeProvider` from a ui-kit or an `ErrorBoundary` from a bug reporter you can use the optional `init` function to tell `ReactRailsHotLoader` to wrap your components in that instead.
