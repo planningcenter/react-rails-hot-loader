@@ -1,5 +1,5 @@
 # react-rails-hot-loader
-This package is the product of 3, possibly 4, separate free weeks the Services team used to get [`react-hot-loader`](https://github.com/gaearon/react-hot-loader) working with [`react-rails`](https://github.com/reactjs/react-rails) and [`webpacker`](https://github.com/rails/webpacker). According to the docs it should be pretty easy. Add a few deps, change some webpack config, wrap your "single entry point" and bing bang boom, 🔥 reloading. This is not real life. If you're curious about why it is not, see the [Questions](https://github.com/planningcenter/react-rails-hot-loader#questions) section below.
+This package is the product of [1](https://github.com/ministrycentered/services/pull/5681), [2](https://github.com/ministrycentered/services/pull/6868), [3](https://github.com/ministrycentered/services/pull/9363), separate free weeks the Services team used to get [`react-hot-loader`](https://github.com/gaearon/react-hot-loader) working with [`react-rails`](https://github.com/reactjs/react-rails) and [`webpacker`](https://github.com/rails/webpacker). According to the docs it should be pretty easy. Add a few deps, change some webpack config, wrap your "single entry point" and bing bang boom, 🔥 reloading. This is not real life. If you're curious about why it is not, see the [Questions](https://github.com/planningcenter/react-rails-hot-loader#questions) section below.
 
 Rather than share a large gist or pull request these two files with all the other config into every app. I wanted to share the setup a bit more easily and take advantage of one teams solution helping all of us.
 
@@ -124,6 +124,10 @@ Since most all of our apps were built with "legacy" React (classes), class compo
 If your team is ok with class components not preserving state and have figured out how to fit it into an app using `react-rails` multiple entry points, please let me know so I can add a link from this document.
 
 ## Contributing
+This project exists thanks to all the people who contribute.
+* [@jbarrieault](https://github.com/jbarrieault)
+* [@souporserious](https://github.com/souporserious)
+* [@tannermares](https://github.com/tannermares)
 ### Developing 
 1. clone the repo
 2. in the directory of the app in question
