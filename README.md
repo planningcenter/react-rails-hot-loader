@@ -117,9 +117,9 @@ The first problem is that `react-rails` applications (at least the way PCO uses 
 
 Second, you have to make sure that `react-hot-loader` is required before `react` and `react-dom`. With the combination of webpack and sprockets, it's hard to know where that spot is. So you'd probably want to use the patch option (step 3 second bullet). That means prepending each entry point with `react-hot-loader/path`, easy. But where are my entry points? With `webpacker` they're added dynamically based on the files in your packs folder. Hmmmm. Not so easy. This requires some "fun" webpack config massaging that I've saved you from having to do.
 
-The `react-hot-loader` v4 added a `hot` function that is "supposed" to export a hot version of the wrapped component and also _self-accept_ itself on reload. I could not get it to work without manually accepting ([the v3 way](https://github.com/gaearon/react-hot-loader#appcontainer-vs-hot)). That is where the bulk of this packages logic goes. Finding all the modules that could be "hot", and providing a way to self accept and require them easily.
+`react-hot-loader` v4 added a `hot` function that is "supposed" to export a hot version of the wrapped component and also _self-accept_ itself on reload. I could not get it to work without manually accepting ([the v3 way](https://github.com/gaearon/react-hot-loader#appcontainer-vs-hot)). That is where the bulk of this packages logic goes. Finding all the modules that could be "hot", and providing a way to self accept and require them easily.
 
-### What not fast refresh?
+### Why not fast refresh?
 [Fast refresh](https://mariosfakiolas.com/blog/what-the-heck-is-react-fast-refresh) will be the blessed path moving forward and developer experience-wise it offers a couple more features `react-hot-loader` doesn't.
 * it will continue working once we resolve a syntax or a runtime error without having to reload manually 💖
 * local state will be preserved for function components and Hooks out of the box 🍬
