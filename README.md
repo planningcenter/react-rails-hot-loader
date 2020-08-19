@@ -131,7 +131,7 @@ If your team is ok with class components not preserving state and have figured o
     * this will point the package to your local copy
     * assuming you've cloned into the same folder your app is in
 4. make edits
-5. `yarn add ../react-rails-hot-loader` to update the cache (it's annoying I know, but better then pushing build every time)
+5. `yarn add ../react-rails-hot-loader` to update the cache (it's annoying I know, but better then pushing a build every time)
 
 ### Publishing
 1. fix bug
