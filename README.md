@@ -4,7 +4,8 @@ This package is the product of [1](https://github.com/ministrycentered/services/
 Rather than share a large gist or pull request these two files with all the other config into every app. I wanted to share the setup a bit more easily and take advantage of one teams solution helping all of us.
 
 ## Install
-1. Add github packages config to your `.npmrc`
+1. Add github packages config to your `.npmrc` 
+    * [token in 1Password](https://start.1password.com/open/i?a=XIRT2RIZJJBMBAVOUV4EYM7TZM&v=3bylhkfvz6uet4ahsqv56w3y2a&i=gyasewk63vbffn6fwzizxri3ei&h=planningcenter.1password.com)
 ``` bash
 # .npmrc
 //npm.pkg.github.com/:_authToken=GITHUB_PACKAGES_TOKEN
