@@ -70,7 +70,8 @@ The `ReactRailsHotloader.mountComponents` is an _almost_ exact duplicate of the 
 ``` bash
 $ bin/webpack-dev-server
 ```
-6. bask in the warmth of the 🔥 loading
+6. bask in the warmth of the 🔥 loading and marvel at how much faster you can work not waiting for full page refreshes
+    * Note: hot loading does not work with `createClass` components
 
 ### Optional step
 If your app needs to wrap every component in something like a `ThemeProvider` from a ui-kit or an `ErrorBoundary` from a bug reporter you can use the optional `init` function to tell `ReactRailsHotLoader` to wrap your components in that instead.
