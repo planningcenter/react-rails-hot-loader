@@ -21,7 +21,7 @@ const ReactRailsHotLoader = {
 
   // The majority of this function is is an exact copy of the mountComponents
   // function in react-rails. The addition of the transformProps callback and
-  // AppProfider wrapping at the end are its only additions
+  // AppProvider wrapping at the end are its only additions
   // https://github.com/reactjs/react-rails/blob/v2.6.1/react_ujs/index.js#L85
   mountComponents: function (searchSelector) {
     let ujs = window.ReactRailsUJS;
